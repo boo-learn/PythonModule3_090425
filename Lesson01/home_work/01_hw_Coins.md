@@ -19,5 +19,20 @@ class Coin:
         """
         Подбрасывание монетки. # heads-орел/tails-решка
         """
-        self.side = ...  # random: heads/tails
+        sides = ["heads", "tails"]
+        self.side = random.choice(sides)  # random: heads/tails
+
+n = int(input("Введите количество монет: "))
+coins = [Coin() for _ in range(n)]
+for coin in coins:
+    coin.flip()
+    print(coin.side)
+
+heads_count = sum(1 for coin in coins if coin.side == "heads")
+tails_count = n - heads_count
+
+heads_percentage = round((heads_count / n) * 100, 1)
+tails_percentage = round((tails_count / n) * 100, 1)
+
+print(f"Орлы: {heads_percentage}%\nРешки: {tails_percentage}%")
 ```
