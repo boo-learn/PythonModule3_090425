@@ -3,11 +3,40 @@
 Описать класс Car
 ``` python
 class Car:
-    def __init__(self, ...):
-        self.gas = ...
-        self.capacity = ...
-        self.gas_per_km = ...
+    def __init__(self, capacity, gas_per_km):
+        self.gas = 0
+        self.mileage = 0
+        self.capacity = capacity
+        self.gas_per_km = gas_per_km
+        print(f"Количество топлива: {self.gas} ")
 
+     def fill(self, liters):
+        space_left = self.capacity - self.gas
+        if liters > space_left:
+            self.gas = self.capacity
+            extra_gas = liters - space_left
+            print(f"{extra_gas} литров топлива не поместилось в бак")
+        else:
+            self.gas += liters
+
+
+    def ride(self, distance):
+        max_possible_km = self.gas / self.gas_per_km
+        if distance > max_possible_km:
+            print(f"Топлива хватило только на {max_possible_km} км")
+            self.gas = 0
+            self.mileage += max_possible_km
+        else:
+            self.gas -= distance * self.gas_per_km
+            self.mileage += distance
+
+car = Car(60, 0.07)
+car.fill(30)
+print(f"Количество топлива: {car.gas} ")
+car.fill(50)
+print(f"Количество топлива: {car.gas} ")
+car.ride(900)
+print(car.mileage)
 ```
 **Важно**: названия методов и атрибутов(свойств) в вашем коде, должны соответствовать указанным в задаче.
 
