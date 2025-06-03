@@ -4,8 +4,6 @@
 
 from Lesson08.examples.dfs import visited
 
-# Решите задачу и выведите ответ в нужном формате
-
 graph = [
     [1],  # 0
     [0, 5],  # 1
@@ -38,7 +36,7 @@ def dfs(graph: list[list], start_vertex: int) -> list[bool]:
 
 visited = dfs(graph, 1)
 print(visited)
-start_nodes = [5, 13, 3, 8]
+start_nodes = [8, 13, 3, 5]
 key1 = 10
 key2 = 7
 target = 0
@@ -55,32 +53,27 @@ def unlock(graph, a, b):
 lock1_opened = False
 lock2_opened = False
 
+for start in start_nodes.copy():
+    visited = dfs(graph, start)
+    if visited[target]:
+        print(f"Цель ({target}) достижима из вершины s - {start}.")
+        start_nodes.remove(start)
+
 for start in start_nodes:
     visited = dfs(graph, start)
     if not lock1_opened and visited[key1]:
-        unlock(graph,*lock1)
+        unlock(graph, *lock1)
         lock1_opened = True
-        print(f"  → Ключ key1 ({key1}) найден. Замок 1 {lock1} открыт.")
+        print(f" Для s - {start} ключ  ({key1}) найден. Замок {lock1} открыт.")
+        print(f"Цель ({target}) достижима из вершины s - {start}.")
 
-    if not lock2_opened and visited[key2]:
+    elif not lock2_opened and visited[key2]:
         unlock(graph,*lock2)
         lock2_opened = True
-        print(f"  → Ключ key2 ({key2}) найден. Замок 2 {lock2} открыт.")
-
-    if not visited[key1] and not visited[key2]:
-        print(" Ключи не найдены из этой вершины.")
-
-    if lock1_opened and lock2_opened:
-        print("Оба замка открыты. Поиск ключей завершён.\n")
-
-reachable = False
-for start in start_nodes:
-    visited = dfs(graph, start)
-    if visited[target]:
-        print(f"Цель ({target}) достижима из вершины {start}.")
-        reachable = True
-        
-if not reachable:
-    print(f"Цель ({target}) недостижима ни из одной стартовой вершины.")
+        print(f" Для s - {start} ключ  ({key2}) найден. Замок {lock2} открыт.")
+        print(f"Но цель ({target}) недостижима для этой вершины.")
+    else:
+        print(f" Для s - {start} ключ не найден.")
+        print(f"и цель ({target}) недостижима для этой вершины.")
 
 #Vladimir Ghilas
