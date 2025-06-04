@@ -1,64 +1,124 @@
-from IBank_part5 import Account, CreditAccount
+from IBank_part5 import  CreditAccount
 
 EMPLOYEE_PASSWORD = "123"
+from typing import List
 
+class BankSystem:
+    def __init__(self):
+        self.account: List[CreditAccount] = []
 
-def close_account():
-    """
-    Закрыть счет клиента.
-    Считаем, что оставшиеся на счету деньги были выданы клиенту наличными, при закрытии счета
-    """
-    pass
+def close_account(self):
+    name = input("Введите имя клиента, чей счет хотите закрыть: ")
+    account = self.name
+    if account.balance == 0:
+        self.accounts.remove(account)
+        print("Счёт успешно закрыт.")
+    else:
+        print("Операция отменена.")
 
+def view_accounts_list(accounts: List[CreditAccount]):
+    for acc in accounts:
+        print(f"{acc.name} баланс: {acc.balance} руб. паспорт: {acc.passport} т.{acc.phone_number}")
 
-def view_accounts_list():
-    """
-        Отображение всех клиентов банка в виде нумерованного списка
-        """
+def view_account_by_passport(accounts: List[CreditAccount]):
+    passport_to_find = input("Введите номер паспорта: ").strip()
+    found = False
+    for acc in accounts:
+        if acc.passport == passport_to_find:
+            print(f"{acc.name} баланс: {acc.balance} руб. паспорт: {acc.passport} т.{acc.phone_number}")
+            found = True
+            break
 
-
-def view_account_by_passport():
-    pass
+    if not found:
+        print("Клиент с таким паспортом не найден.")
 
 
 def view_client_account():
-    """
-    Узнать состояние своего счета
-    """
-    pass
+    passport = input("Введите номер паспорта: ").strip()
 
+    found = False
+    for acc in accounts:
+        if acc.passport == passport:
+            print(f"{acc.name} баланс: {acc.balance} руб.")
+            found = True
+
+    if not found:
+        print("Клиент с таким паспортом не найден.")
 
 def put_account():
-    """
-    Пополнить счет на указанную сумму.
-    Считаем, что клиент занес наличные через банкомат
-    """
-    pass
+    def deposit_to_account(accounts: list[CreditAccount]):
+        passport = input("Введите номер паспорта: ").strip()
+        account = next((acc for acc in accounts if acc.passport == passport), None)
+        if account is None:
+            print("Клиент с таким паспортом не найден.")
+            return
 
+        amount = int(input("Введите сумму для пополнения: "))
+        account.deposit(amount)
+        print(f"Счет пополнен на {amount} руб. Новый баланс: {account.balance} руб.")
 
 def withdraw():
-    """
-    Снять со счета.
-    Считаем, что клиент снял наличные через банкомат
-    """
-    pass
+    passport = input("Введите номер паспорта: ")
+    try:
+        amount = int(input("Введите сумму для снятия: "))
+    except ValueError:
+        print("Ошибка: введите корректное число.")
+        return
+
+    account = next((acc for acc in accounts if acc.passport == passport), None)
+    if not account:
+        print("Счет с таким паспортом не найден.")
+        return
+
+    try:
+        account.withdraw(amount)
+        print(f"Снято {amount} руб. с вашего счета.")
+    except ValueError as e:
+        print(f"Ошибка: {e}")
 
 
 def transfer():
-    """
-    Перевести на счет другого клиента по номеру телефона
-    """
+    phone = input("Введите номер телефона получателя: ")
+    amount_str = input("Введите сумму перевода: ")
+
+    try:
+        amount = int(amount_str)
+        if amount <= 0:
+            print("Сумма должна быть положительной.")
+            return
+    except ValueError:
+        print("Некорректная сумма.")
+        return
+
+    target_account = next((acc for acc in accounts if acc.phone_number == phone), None)
+    if target_account is None:
+        print("Клиент с таким номером телефона не найден.")
+        return
+
+    passport = input("Введите ваш паспорт: ")
+    source_account = next((acc for acc in accounts if acc.passport == passport), None)
+    if source_account is None:
+        print("Ваш счет не найден.")
+        return
+
+    try:
+        source_account.transfer(target_account, amount)
+        print(f"Перевод на {amount} руб. выполнен успешно.")
+    except ValueError as e:
+        print(f"Ошибка: {e}")
     pass
 
 
-def create_new_account():
+def create_new_account(self, name: str, passport: str, phone_number: str, start_balance: int = 0, negative_limit: int = 0):
     print("Укажите данные клиента")
     name = input("Имя:")
     passport = input("Номер паспорта: ")
     phone_number = input("Номер телефона: ")
-    # TODO: тут создаем новый аккаунт пользователя account = ...
-    #   и добавляем его в accounts.append(account)
-
+    start_balance = int(input("Начальный баланс: "))
+    negative_limit = int(input("Лимит кредита"))
+    account = CreditAccount(name, passport, phone_number, start_balance)
+    self.accounts.append(account)
+    print("Обычный счет создан.")
 
 def client_menu(account):
     while True:
