@@ -13,7 +13,7 @@ class Product(Protocol):
     price: float
 
     def __str__(self) -> str:
-        ...
+        pass
 
 
 @runtime_checkable
@@ -63,6 +63,19 @@ class Order:
         # Убедитесь, что item соответствует протоколу Orderable с помощью isinstance().
         if not isinstance(item, Orderable):
             raise TypeError("Добавляемый элемент должен соответствовать протоколу Orderable.")
+        is_new_order = True
+        for order, count in self.items:
+            if item.name == order.name: # заказ с таким названием есть
+                new_order = order, count + 1
+                self.items.remove((order, count))
+                self.items.append(new_order)
+                is_new_order = False
+
+        if is_new_order:
+            new_order = item, quantity
+            self.items.append(new_order)
+
+
         print(f"Adding {quantity}x {item.name} to {self.customer_name}'s order.")  # Временная заглушка
 
     def get_total_price(self) -> float:
@@ -121,6 +134,8 @@ class Cafe:
             return self.orders[order_id]
         return None
 
+class NotProduct:
+    ...
 
 # --- Код для тестирования (не менять, использовать для проверки) ---
 if __name__ == "__main__":
@@ -131,11 +146,13 @@ if __name__ == "__main__":
     croissant = MenuItem("Круассан", 2.00)
     sandwich = MenuItem("Сэндвич", 7.80)
     water = MenuItem("Вода", 1.50)
+    pizza = NotProduct()
 
     my_cafe.add_menu_item(latte)
     my_cafe.add_menu_item(croissant)
     my_cafe.add_menu_item(sandwich)
     my_cafe.add_menu_item(water)
+    my_cafe.add_menu_item(pizza)
     my_cafe.add_menu_item(MenuItem("Латте", 4.00))  # Попытка добавить дубликат
 
     print("--- Меню ---")

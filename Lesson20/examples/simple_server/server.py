@@ -1,8 +1,11 @@
 # server.py
 import socket
+from pathlib import Path
 
 HOST = '127.0.0.1'  # Стандартный IP-адрес для localhost (твой компьютер)
 PORT = 8080         # Порт, на котором будет работать сервер
+
+PATH_TO_HTML = Path('pages') / 'hello.html'
 
 def run_server():
     # Создаем сокет (интерфейс для сетевого соединения)
@@ -26,11 +29,18 @@ def run_server():
                 data = conn.recv(1024)
                 print(f"Получено: {data.decode('utf-8').strip()}")
 
+                with open(PATH_TO_HTML, "r", encoding='UTF-8') as file:
+                    data = file.read()
+
                 # Отправляем ответ клиенту
-                response = "HTTP/1.1 200 OK\nContent-Type: text/plain; charset=utf-8\n\nПривет от сервера!"
+                response = f"HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n{data}"
                 conn.sendall(response.encode('utf-8'))
 
                 print("Ответ отправлен.")
 
 if __name__ == '__main__':
     run_server()
+
+
+    # Django
+    # FastApi

@@ -51,19 +51,21 @@ class SmartLight(SmartDevice):
     @property
     def device_id(self) -> str:
         # TODO: Реализуйте геттер для абстрактного свойства device_id
-        ...
+        return self._light_id
 
     def turn_on(self) -> None:
         # TODO: Реализуйте метод включения лампочки
-        ...
+        if not self.is_on():
+            self._is_powered_on = True
 
     def turn_off(self) -> None:
         # TODO: Реализуйте метод выключения лампочки
-        ...
+        if self.is_on():
+            self._is_powered_on = False
 
     def is_on(self) -> bool:
         # TODO: Реализуйте метод проверки состояния лампочки
-        ...
+        return self._is_powered_on
 
 
 class SmartThermostat(SmartDevice):
